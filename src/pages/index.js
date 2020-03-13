@@ -4,8 +4,22 @@ import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { rhythm } from "../utils/typography"
-import fetchSheet from "../utils/google_sheet"
+import { fetchItinerary } from "../utils/google_sheet"
 import MapChart from "../components/map"
+
+const LocationDisplay = ({ name }) => {
+  return (
+    <a
+      href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(
+        name
+      )}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {name}
+    </a>
+  )
+}
 
 const BlogIndex = ({ data, location }) => {
   const siteTitle = data.site.siteMetadata.title
@@ -13,7 +27,7 @@ const BlogIndex = ({ data, location }) => {
 
   const [itinerary, setItinerary] = useState([])
   useEffect(() => {
-    fetchSheet().then(iti => {
+    fetchItinerary().then(iti => {
       setItinerary(iti)
     })
   }, [])
@@ -25,6 +39,9 @@ const BlogIndex = ({ data, location }) => {
       d.nightAt &&
       (idx === 0 || itinerary[idx - 1].nightAt !== itinerary[idx].nightAt)
   )
+  const nextItinerary = itinerary
+    .filter(i => i.isFuture)
+    .find(i => i.nightAt !== todayItinerary.nightAt)
 
   return (
     <Layout location={location} title={siteTitle}>
@@ -46,14 +63,22 @@ const BlogIndex = ({ data, location }) => {
       {todayItinerary && (
         <div>
           Today ({todayItinerary.date}), I'm spending the night at{" "}
-          {todayItinerary.nightAt}.
+          <LocationDisplay name={todayItinerary.nightAt} />.
         </div>
       )}
 
       {tomorrowItinerary && (
         <div>
           Tomorrow ({tomorrowItinerary.date}), I'm planning to spend the night
-          at {tomorrowItinerary.nightAt}.
+          at <LocationDisplay name={tomorrowItinerary.nightAt} />.{" "}
+          {nextItinerary &&
+            nextItinerary.nightAt !== tomorrowItinerary.nightAt && (
+              <span>
+                Next location is likely{" "}
+                <LocationDisplay name={nextItinerary.nightAt} /> on{" "}
+                {nextItinerary.date}.
+              </span>
+            )}
         </div>
       )}
 
