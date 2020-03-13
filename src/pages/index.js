@@ -6,6 +6,7 @@ import SEO from "../components/seo"
 import { rhythm } from "../utils/typography"
 import { fetchItinerary } from "../utils/google_sheet"
 import MapChart from "../components/map"
+import ErrorBoundary from "../components/ErrorBoundary"
 
 const LocationDisplay = ({ name }) => {
   return (
@@ -34,11 +35,15 @@ const BlogIndex = ({ data, location }) => {
 
   const todayItinerary = itinerary.find(i => i.isToday)
   const tomorrowItinerary = itinerary.find(i => i.isFuture)
-  const dedupedItinerary = itinerary.filter(
-    (d, idx) =>
-      d.nightAt &&
-      (idx === 0 || itinerary[idx - 1].nightAt !== itinerary[idx].nightAt)
-  )
+  const mapItinerary = itinerary
+    .filter(
+      (d, idx) =>
+        d.nightAt &&
+        (idx === 0 || itinerary[idx - 1].nightAt !== itinerary[idx].nightAt)
+    )
+    .filter(l => l.lat)
+    .filter(l => !l.justPassingBy)
+
   const nextItinerary = itinerary
     .filter(i => i.isFuture)
     .find(i => i.nightAt !== todayItinerary.nightAt)
@@ -82,7 +87,9 @@ const BlogIndex = ({ data, location }) => {
         </div>
       )}
 
-      {dedupedItinerary.length > 0 && <MapChart locations={dedupedItinerary} />}
+      <ErrorBoundary errorMessage={null}>
+        {mapItinerary.length > 0 && <MapChart locations={mapItinerary} />}
+      </ErrorBoundary>
 
       {posts.map(({ node }) => {
         const title = node.frontmatter.title || node.fields.slug

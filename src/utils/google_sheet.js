@@ -47,17 +47,19 @@ export function fetchLatlon() {
       // discard first 1 rows; also drop rows without first column
       const rows = data.values.slice(1).filter(d => d[0])
 
-      const formattedRows = rows.map(row => {
-        const values = Object.fromEntries(
-          row.map((value, colIdx) => [header[colIdx], value])
-        )
+      const formattedRows = rows
+        .map(row => {
+          const values = Object.fromEntries(
+            row.map((value, colIdx) => [header[colIdx], value])
+          )
 
-        return {
-          lat: parseFloat(values.lat),
-          lon: parseFloat(values.lon),
-          ...values,
-        }
-      })
+          return {
+            lat: parseFloat(values.lat),
+            lon: parseFloat(values.lon),
+            ...values,
+          }
+        })
+        .filter(row => row.lat && row.lon)
 
       // return { "Palo Alto, CA": { location: "Palo Alto, CA", lat: ..., lon: ...}}
       return Object.fromEntries(formattedRows.map(v => [v.location, v]))
