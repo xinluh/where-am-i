@@ -1,19 +1,46 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { Link, graphql } from "gatsby"
 
-import Bio from "../components/bio"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { rhythm } from "../utils/typography"
+import fetchSheet from "../utils/google_sheet"
 
 const BlogIndex = ({ data, location }) => {
   const siteTitle = data.site.siteMetadata.title
   const posts = data.allMarkdownRemark.edges
 
+  const [itinerary, setItinerary] = useState([])
+  useEffect(() => {
+    fetchSheet().then(iti => {
+      setItinerary(iti)
+    })
+  }, [])
+
+  const today = new Date()
+  console.log(`${today.getMonth()}/${today.getDate()}`)
+  const todayItinerary = itinerary.find(i => i.isToday)
+  const tomorrowItinerary = itinerary.find(i => i.isFuture)
+
+  console.log(itinerary)
   return (
     <Layout location={location} title={siteTitle}>
       <SEO title="All posts" />
-      <Bio />
+
+      {todayItinerary && (
+        <div>
+          Today ({todayItinerary.date}), I'm spending the night at{" "}
+          {todayItinerary.nightAt}.
+        </div>
+      )}
+
+      {tomorrowItinerary && (
+        <div>
+          Tomorrow ({tomorrowItinerary.date}), I'm planning to spend the night
+          at {tomorrowItinerary.nightAt}.
+        </div>
+      )}
+
       {posts.map(({ node }) => {
         const title = node.frontmatter.title || node.fields.slug
         return (
