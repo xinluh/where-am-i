@@ -1,9 +1,12 @@
-import React from "react"
+import React, { useState } from "react"
 import { Link } from "gatsby"
+import NewBlogEntryLink from "../components/NewBlogEntryLink"
 
 import { rhythm, scale } from "../utils/typography"
 
 const Layout = ({ location, title, children }) => {
+  const [hiddenButtonClicked, setHiddenButtonClicked] = useState(false)
+
   const rootPath = `${__PATH_PREFIX__}/`
   let header
 
@@ -66,7 +69,10 @@ const Layout = ({ location, title, children }) => {
           fontFamily: `monospace`,
         }}
       >
-        © Xinlu Huang {new Date().getFullYear()}
+        <span onClick={e => setHiddenButtonClicked(!hiddenButtonClicked)}>
+          © Xinlu Huang {new Date().getFullYear()}
+        </span>
+        {hiddenButtonClicked && <NewBlogEntryLink />}
       </footer>
     </div>
   )
