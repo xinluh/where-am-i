@@ -29,6 +29,15 @@ export function fetchItinerary() {
           isPast: formattedDate < now,
           lat: parseFloat(values.lat),
           lon: parseFloat(values.lon),
+          drivingDirectionOverviewLine:
+            !values.drivingDirectionOverviewLine ||
+            values.drivingDirectionOverviewLine === ""
+              ? null
+              : // input is [[lat, lon]]; converting to [[lon, lat]]
+                JSON.parse(values.drivingDirectionOverviewLine).map(row => [
+                  row[1],
+                  row[0],
+                ]),
         }
       })
     })

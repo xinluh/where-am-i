@@ -41,8 +41,7 @@ const BlogIndex = ({ data, location }) => {
         d.nightAt &&
         (idx === 0 || itinerary[idx - 1].nightAt !== itinerary[idx].nightAt)
     )
-    .filter(l => l.lat)
-    .filter(l => !l.justPassingBy)
+    .filter(l => l.lat && l.lon)
 
   const nextItinerary = itinerary
     .filter(i => i.isFuture)

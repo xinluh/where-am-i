@@ -4,6 +4,7 @@ import {
   Geographies,
   Geography,
   Marker,
+  Line,
 } from "react-simple-maps"
 import ReactTooltip from "react-tooltip"
 import { fetchLatlon } from "../utils/google_sheet"
@@ -38,43 +39,63 @@ const MapChart = ({ locations }) => {
 
         {locations.map(
           (
-            { nightAt, lat, lon, isFuture, date, dayOfTrip, stoppingPoints },
+            {
+              nightAt,
+              lat,
+              lon,
+              isFuture,
+              date,
+              dayOfTrip,
+              stoppingPoints,
+              drivingDirectionOverviewLine,
+              justPassingBy,
+            },
             idx
           ) => (
             <React.Fragment key={nightAt}>
-              <Marker
-                coordinates={[lon, lat]}
-                onMouseEnter={() => {
-                  setTooltipContent(
-                    `Day ${dayOfTrip} (${date}) ${nightAt}` +
-                      (isFuture ? " (date/location subject to change!)" : "")
-                  )
-                }}
-                onMouseLeave={() => setTooltipContent("")}
-              >
-                <g
-                  fill="none"
-                  stroke={isFuture ? "#808080" : "#FF5533"}
+              {drivingDirectionOverviewLine && (
+                <Line
+                  coordinates={drivingDirectionOverviewLine}
+                  stroke={isFuture ? "#80808060" : "#FF553360"}
                   strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  transform="translate(-12, -24)"
-                >
-                  <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z" />
-                </g>
-                <text
-                  textAnchor="middle"
-                  stroke={isFuture ? "#808080" : "#FF5533"}
-                  style={{
-                    fontFamily: "system-ui",
-                    fill: "#5D5A6D",
-                    fontSize: 10,
+                />
+              )}
+
+              {!justPassingBy && (
+                <Marker
+                  coordinates={[lon, lat]}
+                  onMouseEnter={() => {
+                    setTooltipContent(
+                      `Day ${dayOfTrip} (${date}) ${nightAt}` +
+                        (isFuture ? " (date/location subject to change!)" : "")
+                    )
                   }}
-                  y={-10}
+                  onMouseLeave={() => setTooltipContent("")}
                 >
-                  {idx + 1}
-                </text>
-              </Marker>
+                  <g
+                    fill="none"
+                    stroke={isFuture ? "#808080" : "#FF5533"}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    transform="translate(-12, -24)"
+                  >
+                    <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z" />
+                  </g>
+                  <text
+                    textAnchor="middle"
+                    stroke={isFuture ? "#808080" : "#FF5533"}
+                    style={{
+                      fontFamily: "system-ui",
+                      fill: "#5D5A6D",
+                      fontSize: 10,
+                    }}
+                    y={-10}
+                  >
+                    {idx + 1}
+                  </text>
+                </Marker>
+              )}
 
               {latLonLookup &&
                 stoppingPoints &&
