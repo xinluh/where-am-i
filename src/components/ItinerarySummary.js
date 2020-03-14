@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import styles from "./ItinerarySummary.module.css"
 
 const LocationDisplay = ({ name }) => {
   return (
@@ -24,10 +25,6 @@ const ItinerarySummary = ({ itinerary }) => {
   const dedupedFutureItinerary = itinerary
     .filter(i => parseFloat(i.drivingDistance) > 0)
     .filter(i => i.isFuture)
-
-  const dedupedPastItinerary = itinerary
-    .filter(i => parseFloat(i.drivingDistance) > 0)
-    .filter(i => i.isPast)
 
   const nextItinerary =
     dedupedFutureItinerary.length > 0 ? dedupedFutureItinerary[0] : null
@@ -90,26 +87,29 @@ const ItinerarySummary = ({ itinerary }) => {
               Hide
             </a>
           </h5>
-          <table
-            style={{
-              fontSize: `small`,
-            }}
-          >
+          <table className={styles.itineraryTable}>
             <tbody>
-              {dedupedPastItinerary.map(i => (
-                <tr key={i.nightAt}>
-                  <td>{i.date}</td>
-                  <td>{i.nightAt}</td>
-                  <td>
-                    {i.stoppingPoints && i.stoppingPoints.trim() !== "" && (
-                      <span>via {i.stoppingPoints.split("|").join(",")}</span>
-                    )}
-                  </td>
-                  <td>
-                    {i.drivingDistance} miles / {i.drivingHours} hours
-                  </td>
-                </tr>
-              ))}
+              {itinerary
+                .filter(i => i.isPast)
+                .map(i => (
+                  <tr key={i.nightAt}>
+                    <td>{i.date}</td>
+                    <td>{i.nightAt}</td>
+                    <td>
+                      {i.stoppingPoints && i.stoppingPoints.trim() !== "" && (
+                        <span>via {i.stoppingPoints.split("|").join(",")}</span>
+                      )}
+                    </td>
+                    <td>
+                      {i.drivingDistance && (
+                        <span>
+                          {i.drivingDistance} miles / {i.drivingHours} hours
+                          driven
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
@@ -150,11 +150,7 @@ const ItinerarySummary = ({ itinerary }) => {
               Hide
             </a>
           </h5>
-          <table
-            style={{
-              fontSize: `small`,
-            }}
-          >
+          <table className={styles.itineraryTable}>
             <tbody>
               {dedupedFutureItinerary.map(i => (
                 <tr key={i.nightAt}>
