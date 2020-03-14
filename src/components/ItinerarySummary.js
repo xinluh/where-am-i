@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import { rhythm, scale } from "../utils/typography"
 
 const LocationDisplay = ({ name }) => {
   return (
@@ -16,21 +15,32 @@ const LocationDisplay = ({ name }) => {
 }
 
 const ItinerarySummary = ({ itinerary }) => {
-  const [expanded, setExpanded] = useState(false)
+  const [expandedFuture, setExpandedFuture] = useState(false)
+  const [expandedPast, setExpandedPast] = useState(false)
 
   const todayItinerary = itinerary.find(i => i.isToday)
   const tomorrowItinerary = itinerary.find(i => i.isFuture)
 
   const dedupedFutureItinerary = itinerary
-    .filter(
-      (d, idx) =>
-        d.nightAt &&
-        (idx === 0 || itinerary[idx - 1].nightAt !== itinerary[idx].nightAt)
-    )
+    .filter(i => parseFloat(i.drivingDistance) > 0)
     .filter(i => i.isFuture)
+
+  const dedupedPastItinerary = itinerary
+    .filter(i => parseFloat(i.drivingDistance) > 0)
+    .filter(i => i.isPast)
 
   const nextItinerary =
     dedupedFutureItinerary.length > 0 ? dedupedFutureItinerary[0] : null
+
+  const drivenMiles = itinerary
+    .filter(i => i.isPast)
+    .map(i => parseFloat(i.drivingDistance) || 0)
+    .reduce((a, b) => a + b, 0)
+
+  const drivenHours = itinerary
+    .filter(i => i.isPast)
+    .map(i => parseFloat(i.drivingHours) || 0)
+    .reduce((a, b) => a + b, 0)
 
   return (
     <>
@@ -50,10 +60,58 @@ const ItinerarySummary = ({ itinerary }) => {
         </a>
         , which is updated regularly:{" "}
       </div>
+
       {todayItinerary && (
         <div>
           Today ({todayItinerary.date}), I'm spending the night at{" "}
-          <LocationDisplay name={todayItinerary.nightAt} />.
+          <LocationDisplay name={todayItinerary.nightAt} />. This is day{" "}
+          {todayItinerary.dayOfTrip} of my trip; so far I have driven{" "}
+          <b>{drivenMiles}</b> miles so far in <b>{drivenHours}</b> hours.{" "}
+          <a
+            onClick={_ => setExpandedPast(!expandedPast)}
+            style={{ fontSize: `small` }}
+            href="#"
+          >
+            {" "}
+            {expandedPast ? "Show less" : "Show more"}
+          </a>
+        </div>
+      )}
+
+      {expandedPast && (
+        <div>
+          <h5>
+            Where have I been?{" "}
+            <a
+              onClick={_ => setExpandedPast(!expandedPast)}
+              style={{ fontSize: `small` }}
+              href="#"
+            >
+              Hide
+            </a>
+          </h5>
+          <table
+            style={{
+              fontSize: `small`,
+            }}
+          >
+            <tbody>
+              {dedupedPastItinerary.map(i => (
+                <tr key={i.nightAt}>
+                  <td>{i.date}</td>
+                  <td>{i.nightAt}</td>
+                  <td>
+                    {i.stoppingPoints && i.stoppingPoints.trim() !== "" && (
+                      <span>via {i.stoppingPoints.split("|").join(",")}</span>
+                    )}
+                  </td>
+                  <td>
+                    {i.drivingDistance} miles / {i.drivingHours} hours
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 
@@ -66,26 +124,26 @@ const ItinerarySummary = ({ itinerary }) => {
               <span>
                 Next location is likely{" "}
                 <LocationDisplay name={nextItinerary.nightAt} /> on{" "}
-                {nextItinerary.date}.{" "}
-                <a
-                  onClick={_ => setExpanded(!expanded)}
-                  style={{ fontSize: `small` }}
-                  href="#"
-                >
-                  {" "}
-                  {expanded ? "Show less" : "Show more"}
-                </a>
+                {nextItinerary.date} b.{" "}
               </span>
             )}
+          <a
+            onClick={_ => setExpandedFuture(!expandedFuture)}
+            style={{ fontSize: `small` }}
+            href="#"
+          >
+            {" "}
+            {expandedFuture ? "Show less" : "Show more"}
+          </a>
         </div>
       )}
 
-      {expanded && (
+      {expandedFuture && (
         <div>
           <h5>
-            Upcoming desinations (planned and subject to change!){" "}
+            Upcoming destinations (planned - subject to change!){" "}
             <a
-              onClick={_ => setExpanded(!expanded)}
+              onClick={_ => setExpandedFuture(!expandedFuture)}
               style={{ fontSize: `small` }}
               href="#"
             >
