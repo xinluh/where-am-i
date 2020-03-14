@@ -7,20 +7,7 @@ import { rhythm } from "../utils/typography"
 import { fetchItinerary } from "../utils/google_sheet"
 import MapChart from "../components/map"
 import ErrorBoundary from "../components/ErrorBoundary"
-
-const LocationDisplay = ({ name }) => {
-  return (
-    <a
-      href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(
-        name
-      )}`}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {name}
-    </a>
-  )
-}
+import ItinerarySummary from "../components/ItinerarySummary"
 
 const BlogIndex = ({ data, location }) => {
   const siteTitle = data.site.siteMetadata.title
@@ -33,8 +20,6 @@ const BlogIndex = ({ data, location }) => {
     })
   }, [])
 
-  const todayItinerary = itinerary.find(i => i.isToday)
-  const tomorrowItinerary = itinerary.find(i => i.isFuture)
   const mapItinerary = itinerary
     .filter(
       (d, idx) =>
@@ -43,49 +28,11 @@ const BlogIndex = ({ data, location }) => {
     )
     .filter(l => l.lat && l.lon)
 
-  const nextItinerary = itinerary
-    .filter(i => i.isFuture)
-    .find(i => i.nightAt !== todayItinerary.nightAt)
-
   return (
     <Layout location={location} title={siteTitle}>
       <SEO title="All posts" />
 
-      <div
-        style={{
-          fontSize: `small`,
-          color: `gray`,
-          fontStyle: `italic`,
-        }}
-      >
-        Following are automatically generated from my{" "}
-        <a href="https://docs.google.com/spreadsheets/d/115_n7jB4DH062_OW9zcOHeezJi-MLRqUfeR8V1dpzhQ/edit?usp=sharing">
-          planning spreadsheet
-        </a>
-        , which is updated regularly:{" "}
-      </div>
-      {todayItinerary && (
-        <div>
-          Today ({todayItinerary.date}), I'm spending the night at{" "}
-          <LocationDisplay name={todayItinerary.nightAt} />.
-        </div>
-      )}
-
-      {tomorrowItinerary && (
-        <div>
-          Tomorrow ({tomorrowItinerary.date}), I'm planning to spend the night
-          at <LocationDisplay name={tomorrowItinerary.nightAt} />.{" "}
-          {nextItinerary &&
-            nextItinerary.nightAt !== tomorrowItinerary.nightAt && (
-              <span>
-                Next location is likely{" "}
-                <LocationDisplay name={nextItinerary.nightAt} /> on{" "}
-                {nextItinerary.date}.
-              </span>
-            )}
-        </div>
-      )}
-
+      <ItinerarySummary itinerary={itinerary} />
       <ErrorBoundary errorMessage={null}>
         {mapItinerary.length > 0 && <MapChart locations={mapItinerary} />}
       </ErrorBoundary>

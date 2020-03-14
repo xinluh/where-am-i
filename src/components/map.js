@@ -57,7 +57,7 @@ const MapChart = ({ locations }) => {
                 <Line
                   coordinates={drivingDirectionOverviewLine}
                   stroke={isFuture ? "#80808060" : "#FF553360"}
-                  strokeWidth="2"
+                  strokeWidth={2}
                 />
               )}
 
