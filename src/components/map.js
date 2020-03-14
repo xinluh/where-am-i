@@ -7,7 +7,7 @@ import {
   Line,
 } from "react-simple-maps"
 import ReactTooltip from "react-tooltip"
-import { fetchLatlon } from "../utils/google_sheet"
+import { fetchLatlon } from "../utils/data"
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"
 

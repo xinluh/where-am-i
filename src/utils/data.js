@@ -8,7 +8,7 @@ export function fetchItinerary() {
     .then(response => response.json())
     .then(data => {
       if (!data.values) {
-        throw "Failed to load google sheet"
+        throw new Error("Failed to load google sheet")
       }
       const header = data.values[0]
       // discard first 2 rows; also drop rows without first column
@@ -50,7 +50,7 @@ export function fetchLatlon() {
     .then(response => response.json())
     .then(data => {
       if (!data.values) {
-        throw "Failed to load google sheet"
+        throw new Error("Failed to load google sheet")
       }
       const header = data.values[0]
       // discard first 1 rows; also drop rows without first column

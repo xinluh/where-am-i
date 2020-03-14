@@ -92,7 +92,7 @@ const ItinerarySummary = ({ itinerary }) => {
               {itinerary
                 .filter(i => i.isPast)
                 .map(i => (
-                  <tr key={i.nightAt}>
+                  <tr key={i.date}>
                     <td>{i.date}</td>
                     <td>{i.nightAt}</td>
                     <td>
