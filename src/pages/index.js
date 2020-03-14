@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { Link, graphql } from "gatsby"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { rhythm } from "../utils/typography"
-import { fetchItinerary } from "../utils/data"
+import { useItinerary } from "../utils/data"
 import MapChart from "../components/map"
 import ErrorBoundary from "../components/ErrorBoundary"
 import ItinerarySummary from "../components/ItinerarySummary"
@@ -13,28 +13,21 @@ const BlogIndex = ({ data, location }) => {
   const siteTitle = data.site.siteMetadata.title
   const posts = data.allMarkdownRemark.edges
 
-  const [itinerary, setItinerary] = useState([])
-  useEffect(() => {
-    fetchItinerary().then(iti => {
-      setItinerary(iti)
-    })
-  }, [])
-
-  const mapItinerary = itinerary
-    .filter(
-      (d, idx) =>
-        d.nightAt &&
-        (idx === 0 || itinerary[idx - 1].nightAt !== itinerary[idx].nightAt)
-    )
-    .filter(l => l.lat && l.lon)
+  const { itinerary, error, loading } = useItinerary()
 
   return (
     <Layout location={location} title={siteTitle}>
       <SEO title="All posts" />
 
-      <ItinerarySummary itinerary={itinerary} />
+      {error && <div>Ooopsy, couldn't load itinerary</div>}
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <ItinerarySummary itinerary={itinerary} />
+      )}
+
       <ErrorBoundary errorMessage={null}>
-        {mapItinerary.length > 0 && <MapChart locations={mapItinerary} />}
+        <MapChart itinerary={itinerary} />
       </ErrorBoundary>
 
       {posts.map(({ node }) => {

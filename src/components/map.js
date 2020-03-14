@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import {
   ComposableMap,
   Geographies,
@@ -7,19 +7,24 @@ import {
   Line,
 } from "react-simple-maps"
 import ReactTooltip from "react-tooltip"
-import { fetchLatlon } from "../utils/data"
+import { useLatLonLookup } from "../utils/data"
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"
 
-const MapChart = ({ locations }) => {
+const MapChart = ({ itinerary }) => {
   const [tooltipContent, setTooltipContent] = useState("")
 
-  const [latLonLookup, setLatLonLookup] = useState([])
-  useEffect(() => {
-    fetchLatlon().then(d => {
-      setLatLonLookup(d)
-    })
-  }, [])
+  const { latLonLookup } = useLatLonLookup()
+
+  const locations = itinerary
+    .filter(
+      (d, idx) =>
+        d.nightAt &&
+        (idx === 0 || itinerary[idx - 1].nightAt !== itinerary[idx].nightAt)
+    )
+    .filter(l => l.lat && l.lon)
+
+  if (locations.length === 0) return null
 
   return (
     <div>

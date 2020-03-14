@@ -1,7 +1,8 @@
+import { useState, useEffect } from "react"
 const API_KEY = "AIzaSyApgm2nFzwLrOyISptqXF9RbiHyq1Josbk"
 const SHEET_ID = "115_n7jB4DH062_OW9zcOHeezJi-MLRqUfeR8V1dpzhQ"
 
-export function fetchItinerary() {
+function _fetchItinerary() {
   const TAB = "itinerary"
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${TAB}?key=${API_KEY}`
   return fetch(url)
@@ -43,7 +44,27 @@ export function fetchItinerary() {
     })
 }
 
-export function fetchLatlon() {
+export function useItinerary() {
+  const [itinerary, setItinerary] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    _fetchItinerary()
+      .then(iti => {
+        setItinerary(iti)
+        setLoading(false)
+      })
+      .catch(error => {
+        setError(error)
+        setLoading(false)
+      })
+  }, [])
+
+  return { itinerary, loading, error }
+}
+
+function _fetchLatlon() {
   const TAB = "latlon"
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${TAB}?key=${API_KEY}`
   return fetch(url)
@@ -73,4 +94,24 @@ export function fetchLatlon() {
       // return { "Palo Alto, CA": { location: "Palo Alto, CA", lat: ..., lon: ...}}
       return Object.fromEntries(formattedRows.map(v => [v.location, v]))
     })
+}
+
+export function useLatLonLookup() {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    _fetchLatlon()
+      .then(data => {
+        setData(data)
+        setLoading(false)
+      })
+      .catch(error => {
+        setError(error)
+        setLoading(false)
+      })
+  }, [])
+
+  return { latLonLookup: data, loading, error }
 }
