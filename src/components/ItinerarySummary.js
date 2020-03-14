@@ -41,23 +41,6 @@ const ItinerarySummary = ({ itinerary }) => {
 
   return (
     <>
-      <div
-        style={{
-          fontSize: `small`,
-          color: `gray`,
-          fontStyle: `italic`,
-        }}
-      >
-        Following are automatically generated from my{" "}
-        <a
-          href="https://docs.google.com/spreadsheets/d/115_n7jB4DH062_OW9zcOHeezJi-MLRqUfeR8V1dpzhQ/edit?usp=sharing"
-          style={{ color: `inherit` }}
-        >
-          planning spreadsheet
-        </a>
-        , which is updated regularly:{" "}
-      </div>
-
       {todayItinerary && (
         <div>
           Today ({todayItinerary.date}), I'm spending the night at{" "}

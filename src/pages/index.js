@@ -23,12 +23,29 @@ const BlogIndex = ({ data, location }) => {
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <ItinerarySummary itinerary={itinerary} />
+        <>
+          <ItinerarySummary itinerary={itinerary} />
+          <ErrorBoundary errorMessage={null}>
+            <MapChart itinerary={itinerary} />
+          </ErrorBoundary>
+          <div
+            style={{
+              fontSize: `x-small`,
+              color: `lightgray`,
+              fontStyle: `italic`,
+            }}
+          >
+            Generated automatically from my{" "}
+            <a
+              href="https://docs.google.com/spreadsheets/d/115_n7jB4DH062_OW9zcOHeezJi-MLRqUfeR8V1dpzhQ/edit?usp=sharing"
+              style={{ color: `inherit` }}
+            >
+              planning spreadsheet
+            </a>
+            , which is updated regularly.
+          </div>
+        </>
       )}
-
-      <ErrorBoundary errorMessage={null}>
-        <MapChart itinerary={itinerary} />
-      </ErrorBoundary>
 
       {posts.map(({ node }) => {
         const title = node.frontmatter.title || node.fields.slug
