@@ -72,6 +72,17 @@ const Layout = ({ location, title, children }) => {
         <span onClick={e => setHiddenButtonClicked(!hiddenButtonClicked)}>
           © Xinlu Huang {new Date().getFullYear()}
         </span>
+
+        <span>
+          {" "}
+          Built using Gatsbyjs{" "}
+          <a
+            href="https://github.com/xinluh/where-am-i"
+            style={{ color: `inherit` }}
+          >
+            [GitHub]
+          </a>
+        </span>
         {hiddenButtonClicked && <NewBlogEntryLink />}
       </footer>
     </div>
