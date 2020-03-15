@@ -13,7 +13,7 @@ content`
 
   const filename = title
     .toLowerCase()
-    .replace(" ", "-")
+    .replace(/ /g, "-")
     .replace(/[^a-z0-9-]*/gi, "")
   const commitMessage = `[blog] ${title}`
 
