@@ -30,6 +30,9 @@ function _fetchItinerary() {
           isPast: formattedDate < now,
           lat: parseFloat(values.lat),
           lon: parseFloat(values.lon),
+          stoppingPoints: (values.stoppingPoints || "")
+            .split("|")
+            .map(s => s.trim()),
           drivingDirectionOverviewLine:
             !values.drivingDirectionOverviewLine ||
             values.drivingDirectionOverviewLine === ""

@@ -79,8 +79,8 @@ const ItinerarySummary = ({ itinerary }) => {
                     <td>{i.date}</td>
                     <td>{i.nightAt}</td>
                     <td>
-                      {i.stoppingPoints && i.stoppingPoints.trim() !== "" && (
-                        <span>via {i.stoppingPoints.split("|").join(",")}</span>
+                      {i.stoppingPoints.length > 0 && (
+                        <span>via {i.stoppingPoints.join(",")}</span>
                       )}
                     </td>
                     <td>
@@ -140,8 +140,8 @@ const ItinerarySummary = ({ itinerary }) => {
                   <td>{i.date}</td>
                   <td>{i.nightAt}</td>
                   <td>
-                    {i.stoppingPoints && i.stoppingPoints.trim() !== "" && (
-                      <span>via {i.stoppingPoints.split("|").join(",")}</span>
+                    {i.stoppingPoints.length > 0 && (
+                      <span>via {i.stoppingPoints.join(",")}</span>
                     )}
                   </td>
                 </tr>

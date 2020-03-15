@@ -26,6 +26,10 @@ const MapChart = ({ itinerary }) => {
 
   if (locations.length === 0) return null
 
+  const tooltipContentText = itineraryDay =>
+    `Day ${itineraryDay.dayOfTrip} (${itineraryDay.date}) ${itineraryDay.nightAt}` +
+    (itineraryDay.isFuture ? " (date/location subject to change!)" : "")
+
   return (
     <div>
       <ComposableMap data-tip="" projection="geoAlbersUsa">
@@ -42,101 +46,84 @@ const MapChart = ({ itinerary }) => {
           }
         </Geographies>
 
-        {locations.map(
-          (
-            {
-              nightAt,
-              lat,
-              lon,
-              isFuture,
-              date,
-              dayOfTrip,
-              stoppingPoints,
-              drivingDirectionOverviewLine,
-              justPassingBy,
-            },
-            idx
-          ) => (
-            <React.Fragment key={nightAt}>
-              {drivingDirectionOverviewLine && (
-                <Line
-                  coordinates={drivingDirectionOverviewLine}
-                  stroke={isFuture ? "#80808060" : "#FF553360"}
-                  strokeWidth={2}
-                />
-              )}
-
-              {!justPassingBy && (
-                <Marker
-                  coordinates={[lon, lat]}
-                  onMouseEnter={() => {
-                    setTooltipContent(
-                      `Day ${dayOfTrip} (${date}) ${nightAt}` +
-                        (isFuture ? " (date/location subject to change!)" : "")
-                    )
-                  }}
-                  onMouseLeave={() => setTooltipContent("")}
+        {locations.map((iti, idx) => (
+          <React.Fragment key={iti.nightAt}>
+            {!iti.justPassingBy && (
+              <Marker
+                coordinates={[iti.lon, iti.lat]}
+                onMouseEnter={() => {
+                  setTooltipContent(tooltipContentText(iti))
+                }}
+                onMouseLeave={() => setTooltipContent("")}
+                style={{ hover: { cursor: `pointer` } }}
+              >
+                <g
+                  fill="#ffffff"
+                  stroke={iti.isFuture ? "#808080" : "#FF5533"}
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  transform="translate(-12, -24)"
                 >
-                  <g
-                    fill="none"
-                    stroke={isFuture ? "#808080" : "#FF5533"}
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    transform="translate(-12, -24)"
-                  >
-                    <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z" />
-                  </g>
-                  <text
-                    textAnchor="middle"
-                    stroke={isFuture ? "#808080" : "#FF5533"}
-                    style={{
-                      fontFamily: "system-ui",
-                      fill: "#5D5A6D",
-                      fontSize: 10,
-                    }}
-                    y={-10}
-                  >
-                    {idx + 1}
-                  </text>
-                </Marker>
-              )}
+                  <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z" />
+                </g>
+                <text
+                  textAnchor="middle"
+                  stroke={iti.isFuture ? "#808080" : "#FF5533"}
+                  style={{
+                    fontFamily: "system-ui",
+                    fill: "#5D5A6D",
+                    fontSize: 10,
+                  }}
+                  y={-10}
+                >
+                  {idx + 1}
+                </text>
+              </Marker>
+            )}
 
-              {latLonLookup &&
-                stoppingPoints &&
-                stoppingPoints.trim() !== "" &&
-                stoppingPoints.split("|").map(loc => {
-                  return (
-                    latLonLookup[loc] && (
-                      <Marker
-                        key={loc}
-                        coordinates={[
-                          latLonLookup[loc].lon,
-                          latLonLookup[loc].lat,
-                        ]}
-                        onMouseEnter={() => {
-                          setTooltipContent(
-                            `Visit: ${loc} - Day ${dayOfTrip} (${date})` +
-                              (isFuture
-                                ? " (date/location subject to change!)"
-                                : "")
-                          )
-                        }}
-                        onMouseLeave={() => setTooltipContent("")}
-                      >
-                        <circle
-                          r={5}
-                          fill={isFuture ? "#808080" : "#FF5533"}
-                          stroke="#fff"
-                          strokeWidth={2}
-                        />
-                      </Marker>
-                    )
+            {latLonLookup &&
+              iti.stoppingPoints.length > 0 &&
+              iti.stoppingPoints.map(loc => {
+                return (
+                  latLonLookup[loc] && (
+                    <Marker
+                      key={loc}
+                      coordinates={[
+                        latLonLookup[loc].lon,
+                        latLonLookup[loc].lat,
+                      ]}
+                      onMouseEnter={() => {
+                        setTooltipContent(
+                          `Visit: ${loc} - Day ${iti.dayOfTrip} (${iti.date})` +
+                            (iti.isFuture
+                              ? " (date/location subject to change!)"
+                              : "")
+                        )
+                      }}
+                      onMouseLeave={() => setTooltipContent("")}
+                      style={{ hover: { cursor: `pointer` } }}
+                    >
+                      <circle
+                        r={5}
+                        fill={iti.isFuture ? "#808080" : "#FF5533"}
+                        stroke="#fff"
+                        strokeWidth={2}
+                      />
+                    </Marker>
                   )
-                })}
-            </React.Fragment>
-          )
-        )}
+                )
+              })}
+
+            {iti.drivingDirectionOverviewLine && (
+              <Line
+                coordinates={iti.drivingDirectionOverviewLine}
+                stroke={iti.isFuture ? "#80808060" : "#FF553360"}
+                strokeWidth={2}
+              />
+            )}
+          </React.Fragment>
+        ))}
       </ComposableMap>
       <ReactTooltip>{tooltipContent}</ReactTooltip>
     </div>
