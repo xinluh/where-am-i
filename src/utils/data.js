@@ -32,7 +32,8 @@ function _fetchItinerary() {
           lon: parseFloat(values.lon),
           stoppingPoints: (values.stoppingPoints || "")
             .split("|")
-            .map(s => s.trim()),
+            .map(s => s.trim())
+            .filter(s => s !== ""),
           drivingDirectionOverviewLine:
             !values.drivingDirectionOverviewLine ||
             values.drivingDirectionOverviewLine === ""

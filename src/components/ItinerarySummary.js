@@ -15,6 +15,12 @@ const LocationDisplay = ({ name }) => {
   )
 }
 
+const joinWords = arr => {
+  if (arr.length === 0) return ""
+  if (arr.length === 1) return arr[0]
+  return arr.slice(0, -1).join(",") + ", and " + arr.slice(-1)
+}
+
 const ItinerarySummary = ({ itinerary }) => {
   const [expandedFuture, setExpandedFuture] = useState(false)
   const [expandedPast, setExpandedPast] = useState(false)
@@ -44,9 +50,16 @@ const ItinerarySummary = ({ itinerary }) => {
       {todayItinerary && (
         <div>
           Today ({todayItinerary.date}), I'm spending the night at{" "}
-          <LocationDisplay name={todayItinerary.nightAt} />. This is day{" "}
-          {todayItinerary.dayOfTrip} of my trip; so far I have driven{" "}
-          <b>{drivenMiles}</b> miles so far in <b>{drivenHours}</b> hours.{" "}
+          <LocationDisplay name={todayItinerary.nightAt} />
+          {todayItinerary.stoppingPoints.length > 0 && (
+            <span>
+              , after stopping by {joinWords(todayItinerary.stoppingPoints)}{" "}
+              during the day
+            </span>
+          )}
+          . This is day {todayItinerary.dayOfTrip} of my trip; so far I have
+          driven <b>{drivenMiles}</b> miles in total of <b>{drivenHours}</b>{" "}
+          hours.{" "}
           <a
             onClick={_ => setExpandedPast(!expandedPast)}
             style={{ fontSize: `small` }}
@@ -80,7 +93,7 @@ const ItinerarySummary = ({ itinerary }) => {
                     <td>{i.nightAt}</td>
                     <td>
                       {i.stoppingPoints.length > 0 && (
-                        <span>via {i.stoppingPoints.join(",")}</span>
+                        <span>via {i.stoppingPoints.join(", ")}</span>
                       )}
                     </td>
                     <td>
@@ -99,9 +112,15 @@ const ItinerarySummary = ({ itinerary }) => {
       )}
 
       {tomorrowItinerary && (
-        <div>
+        <div style={{ marginTop: 10 }}>
           Tomorrow ({tomorrowItinerary.date}), I'm planning to spend the night
-          at <LocationDisplay name={tomorrowItinerary.nightAt} />.{" "}
+          at <LocationDisplay name={tomorrowItinerary.nightAt} />
+          {tomorrowItinerary.stoppingPoints.length > 0 && (
+            <span>
+              , after stopping by {joinWords(tomorrowItinerary.stoppingPoints)}
+            </span>
+          )}
+          .{" "}
           {nextItinerary &&
             nextItinerary.nightAt !== tomorrowItinerary.nightAt && (
               <span>
@@ -141,7 +160,7 @@ const ItinerarySummary = ({ itinerary }) => {
                   <td>{i.nightAt}</td>
                   <td>
                     {i.stoppingPoints.length > 0 && (
-                      <span>via {i.stoppingPoints.join(",")}</span>
+                      <span>via {i.stoppingPoints.join(", ")}</span>
                     )}
                   </td>
                 </tr>
