@@ -58,8 +58,8 @@ const ItinerarySummary = ({ itinerary }) => {
             </span>
           )}
           . This is day {todayItinerary.dayOfTrip} of my trip; so far I have
-          driven <b>{drivenMiles}</b> miles in total of <b>{drivenHours}</b>{" "}
-          hours.{" "}
+          driven <b>{drivenMiles}</b> miles in total of{" "}
+          <b>{Math.round(drivenHours)}</b> hours.{" "}
           <a
             onClick={_ => setExpandedPast(!expandedPast)}
             style={{ fontSize: `small` }}
