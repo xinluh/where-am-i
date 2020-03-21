@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react"
+import promiseRetry from "promise-retry"
+import { trackCustomEvent } from "gatsby-plugin-google-analytics"
+
 const API_KEY = "AIzaSyApgm2nFzwLrOyISptqXF9RbiHyq1Josbk"
 const SHEET_ID = "115_n7jB4DH062_OW9zcOHeezJi-MLRqUfeR8V1dpzhQ"
 
@@ -54,15 +57,25 @@ export function useItinerary() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    _fetchItinerary()
-      .then(iti => {
-        setItinerary(iti)
+    promiseRetry((retry, number) => {
+      console.log("attempt number", number)
+
+      return _fetchItinerary().catch(retry)
+    }).then(
+      ret => {
+        setItinerary(ret)
         setLoading(false)
-      })
-      .catch(error => {
-        setError(error)
+      },
+      err => {
+        setError(err)
         setLoading(false)
-      })
+        trackCustomEvent({
+          category: "itinerary",
+          action: "page_load",
+          // label: "some label",
+        })
+      }
+    )
   }, [])
 
   return { itinerary, loading, error }
