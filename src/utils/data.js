@@ -25,6 +25,15 @@ function _fetchItinerary() {
         )
 
         const formattedDate = new Date(`${values.date}/2020`)
+
+        let drivingDirectionLine = null
+        try {
+          // input is [[lat, lon]]; converting to [[lon, lat]]
+          drivingDirectionLine = JSON.parse(
+            values.drivingDirectionOverviewLine
+          ).map(row => [row[1], row[0]])
+        } catch {}
+
         return {
           ...values,
           dateFormatted: formattedDate,
@@ -37,15 +46,7 @@ function _fetchItinerary() {
             .split("|")
             .map(s => s.trim())
             .filter(s => s !== ""),
-          drivingDirectionOverviewLine:
-            !values.drivingDirectionOverviewLine ||
-            values.drivingDirectionOverviewLine === ""
-              ? null
-              : // input is [[lat, lon]]; converting to [[lon, lat]]
-                JSON.parse(values.drivingDirectionOverviewLine).map(row => [
-                  row[1],
-                  row[0],
-                ]),
+          drivingDirectionOverviewLine: drivingDirectionLine,
         }
       })
     })
@@ -57,17 +58,27 @@ export function useItinerary() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    promiseRetry((retry, number) => {
-      console.log("attempt number", number)
+    promiseRetry(
+      (retry, number) => {
+        console.log("attempt number", number)
 
-      return _fetchItinerary().catch(retry)
-    }).then(
+        return _fetchItinerary().catch(err => {
+          if (err.message === "Failed to load google sheet") {
+            retry(err)
+          } else {
+            throw err
+          }
+        })
+      },
+      { retries: 3 }
+    ).then(
       ret => {
         setItinerary(ret)
         setLoading(false)
       },
       err => {
         setError(err)
+        console.log(err)
         setLoading(false)
         trackCustomEvent({
           category: "itinerary",
