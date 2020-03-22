@@ -19,3 +19,4 @@ On coronavirus related notes,
 On non-coronavirus related notes,
 - Kerouac's _On the Road_ was a memorable inspiration to my younger, impressionable self, and I was excited to see signs for "Historical Route 66" all along the road from Flagstaff to Albuqueque. I was disappointed to find out that the real historical route 66 was mostly gone and replaced by interstate highways
 - We drove pass the [Continental Divide](https://en.wikipedia.org/wiki/Continental_Divide_of_the_Americas) today - it was weirdly an almost non-event, announced only briefly by a passing highway sign
+- Petrified Forest National Park has some gorgeous stones ![](./DSC01133.JPG)
