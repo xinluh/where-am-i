@@ -126,7 +126,7 @@ const ItinerarySummary = ({ itinerary }) => {
               <span>
                 Next location is likely{" "}
                 <LocationDisplay name={nextItinerary.nightAt} /> on{" "}
-                {nextItinerary.date} b.{" "}
+                {nextItinerary.date}.{" "}
               </span>
             )}
           <a
