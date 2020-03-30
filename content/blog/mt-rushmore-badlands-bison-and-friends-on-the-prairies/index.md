@@ -23,4 +23,6 @@ I came to the Badlands National Park to see the titular badlands; seeing wildlif
 And they look spectacular at sunset:
 ![](./DSC01359.JPG)
 
+The towns near the park are amusingly named - Wall, Interior, Scenic. It makes directions rather bewildering grammar exercise - "turn right near Wall," "drive toward Interior," or "fill up gas at Scenic"
+
 I did not end up doing the 2-day backpacking trip. The trail seems muddy from the recent rain, and more concerningly, Trump's comment about potential quarantine of New York spook me on the possibility that I may be stuck in a strange place for a long time  - an adventure that I'm not yet ready for.
