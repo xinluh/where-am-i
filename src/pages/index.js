@@ -19,7 +19,21 @@ const BlogIndex = ({ data, location }) => {
     <Layout location={location} title={siteTitle}>
       <SEO title="Home | Where is Xinlu" />
 
+      <div
+        style={{
+          border: `solid orange 1px`,
+          padding: 10,
+          margin: `10px 0px`,
+          borderRadius: 5,
+          background: `#ffa50014`,
+        }}
+      >
+        Trip has ended! Everything here are frozen as of last day of the trip,
+        March 31, 2020.
+      </div>
+
       {error && <div>Ooopsy, couldn't load itinerary</div>}
+
       {loading ? (
         <div>Loading...</div>
       ) : (

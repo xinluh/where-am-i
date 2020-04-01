@@ -111,7 +111,7 @@ const ItinerarySummary = ({ itinerary }) => {
         </div>
       )}
 
-      {tomorrowItinerary && (
+      {tomorrowItinerary && tomorrowItinerary.nightAt !== "" && (
         <div style={{ marginTop: 10 }}>
           Tomorrow ({tomorrowItinerary.date}), I'm planning to spend the night
           at <LocationDisplay name={tomorrowItinerary.nightAt} />
