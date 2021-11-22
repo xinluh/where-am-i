@@ -40,15 +40,14 @@
   "license": "MIT",
   "main": "n/a",
   "scripts": {
-    "build": "gatsby build",
+    "build": "gatsby build --prefix-paths",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
-    "predeploy": "npm run build",
-    "deploy": "gatsby build --prefix-paths && gh-pages -d public",
-    "deployci": "gatsby build --prefix-paths && gh-pages -d public -r https://$GH_TOKEN@github.com/xinluh/where-am-i.git"
+    "deploy": "npm run build && gh-pages -d public",
+    "deploy-gh-pages-ci": "gh-pages -d public -r https://$GH_TOKEN@github.com/xinluh/where-am-i.git"
   }
 }
