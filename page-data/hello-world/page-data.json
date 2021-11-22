@@ -1,5 +1,5 @@
 {
     "componentChunkName": "component---src-templates-blog-post-js",
     "path": "/hello-world/",
-    "result": {"data":{"site":{"siteMetadata":{"title":"Where is Xinlu"}},"markdownRemark":{"id":"2c41c3de-2397-577d-9efc-8808d34a5548","excerpt":"I might write something here from time to time.","html":"<p>I might write something here from time to time.</p>","frontmatter":{"title":"Hello World","date":"March 12, 2020","description":""}},"previous":null,"next":{"fields":{"slug":"/travel-in-the-time-of-coronavirus/"},"frontmatter":{"title":"Travel in the Time of Coronavirus"}}},"pageContext":{"id":"2c41c3de-2397-577d-9efc-8808d34a5548","previousPostId":null,"nextPostId":"2f21fdff-4a62-5a89-b5a1-2beefca9ba3d"}},
+    "result": {"data":{"site":{"siteMetadata":{"title":"Where is Xinlu"}},"markdownRemark":{"id":"2c437a2f-dd0d-542e-b361-c70062da1267","excerpt":"I might write something here from time to time.","html":"<p>I might write something here from time to time.</p>","frontmatter":{"title":"Hello World","date":"March 12, 2020","description":""}},"previous":null,"next":{"fields":{"slug":"/travel-in-the-time-of-coronavirus/"},"frontmatter":{"title":"Travel in the Time of Coronavirus"}}},"pageContext":{"id":"2c437a2f-dd0d-542e-b361-c70062da1267","previousPostId":null,"nextPostId":"eb8a6565-ea61-5144-9bd6-de84150d08c4"}},
     "staticQueryHashes": ["3000541721"]}
