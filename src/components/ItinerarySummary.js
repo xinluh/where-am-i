@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import styles from "./ItinerarySummary.module.css"
 
 const LocationDisplay = ({ name }) => {
   return (
@@ -15,7 +14,7 @@ const LocationDisplay = ({ name }) => {
   )
 }
 
-const joinWords = arr => {
+const joinWords = (arr) => {
   if (arr.length === 0) return ""
   if (arr.length === 1) return arr[0]
   return arr.slice(0, -1).join(",") + ", and " + arr.slice(-1)
@@ -25,24 +24,24 @@ const ItinerarySummary = ({ itinerary }) => {
   const [expandedFuture, setExpandedFuture] = useState(false)
   const [expandedPast, setExpandedPast] = useState(false)
 
-  const todayItinerary = itinerary.find(i => i.isToday)
-  const tomorrowItinerary = itinerary.find(i => i.isFuture)
+  const todayItinerary = itinerary.find((i) => i.isToday)
+  const tomorrowItinerary = itinerary.find((i) => i.isFuture)
 
   const dedupedFutureItinerary = itinerary
-    .filter(i => parseFloat(i.drivingDistance) > 0)
-    .filter(i => i.isFuture)
+    .filter((i) => parseFloat(i.drivingDistance) > 0)
+    .filter((i) => i.isFuture)
 
   const nextItinerary =
     dedupedFutureItinerary.length > 0 ? dedupedFutureItinerary[0] : null
 
   const drivenMiles = itinerary
-    .filter(i => i.isPast)
-    .map(i => parseFloat(i.drivingDistance) || 0)
+    .filter((i) => i.isPast)
+    .map((i) => parseFloat(i.drivingDistance) || 0)
     .reduce((a, b) => a + b, 0)
 
   const drivenHours = itinerary
-    .filter(i => i.isPast)
-    .map(i => parseFloat(i.drivingHours) || 0)
+    .filter((i) => i.isPast)
+    .map((i) => parseFloat(i.drivingHours) || 0)
     .reduce((a, b) => a + b, 0)
 
   return (
@@ -61,7 +60,7 @@ const ItinerarySummary = ({ itinerary }) => {
           driven <b>{drivenMiles}</b> miles in total of{" "}
           <b>{Math.round(drivenHours)}</b> hours.{" "}
           <a
-            onClick={_ => setExpandedPast(!expandedPast)}
+            onClick={(_) => setExpandedPast(!expandedPast)}
             style={{ fontSize: `small` }}
             href="#"
           >
@@ -76,18 +75,18 @@ const ItinerarySummary = ({ itinerary }) => {
           <h5>
             Where have I been?{" "}
             <a
-              onClick={_ => setExpandedPast(!expandedPast)}
+              onClick={(_) => setExpandedPast(!expandedPast)}
               style={{ fontSize: `small` }}
               href="#"
             >
               Hide
             </a>
           </h5>
-          <table className={styles.itineraryTable}>
+          <table className="itinerary-table">
             <tbody>
               {itinerary
-                .filter(i => i.isPast)
-                .map(i => (
+                .filter((i) => i.isPast)
+                .map((i) => (
                   <tr key={i.date}>
                     <td>{i.date}</td>
                     <td>{i.nightAt}</td>
@@ -130,7 +129,7 @@ const ItinerarySummary = ({ itinerary }) => {
               </span>
             )}
           <a
-            onClick={_ => setExpandedFuture(!expandedFuture)}
+            onClick={(_) => setExpandedFuture(!expandedFuture)}
             style={{ fontSize: `small` }}
             href="#"
           >
@@ -145,16 +144,16 @@ const ItinerarySummary = ({ itinerary }) => {
           <h5>
             Upcoming destinations (planned - subject to change!){" "}
             <a
-              onClick={_ => setExpandedFuture(!expandedFuture)}
+              onClick={(_) => setExpandedFuture(!expandedFuture)}
               style={{ fontSize: `small` }}
               href="#"
             >
               Hide
             </a>
           </h5>
-          <table className={styles.itineraryTable}>
+          <table className="itinerary-table">
             <tbody>
-              {dedupedFutureItinerary.map(i => (
+              {dedupedFutureItinerary.map((i) => (
                 <tr key={i.nightAt}>
                   <td>{i.date}</td>
                   <td>{i.nightAt}</td>

@@ -17,5 +17,7 @@ jobs:
       with:
         node-version: 12.x
         cache: 'npm'
-    - run: npm install -g gatsby-cli
-    - run: yarn install && yarn run deployci
+    - run: npm install
+    - env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: npm run deployci
