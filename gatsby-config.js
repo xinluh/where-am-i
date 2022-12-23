@@ -6,9 +6,9 @@ module.exports = {
       summary: ``,
     },
     description: ``,
-    siteUrl: `http://xinluh.github.io/where-am-i`,
+    siteUrl: `https://roadtrip2020.xinlu.dev`,
   },
-  pathPrefix: "/where-am-i",
+  pathPrefix: "/",
   plugins: [
     `gatsby-plugin-image`,
     {
